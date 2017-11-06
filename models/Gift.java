@@ -1,6 +1,8 @@
 package models;
 import java.util.Date;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+
 
 
 public class Gift{
@@ -8,6 +10,7 @@ public class Gift{
 	private String name;
 	private String description;
 	private Date given;
+	SimpleDateFormat dateFormat = new SimpleDateFormat("d/M/y H:m");
 	
 	public Gift(){
 		
@@ -49,7 +52,7 @@ public class Gift{
 		}
 	}
 	public String toString(){
-		return name+"\n"+description+"\n"+given.toString();
+		return "Gift Name:"+name+"\n Description: "+description+"\n Date given: "+dateFormat.format(given).toString();
 	}
 	public int hwManyGifts(ArrayList<Gift> gifts){
 		return gifts.size();

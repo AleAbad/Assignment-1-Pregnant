@@ -1,13 +1,17 @@
 package models;
 import java.util.Date;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+
 
 public class Baby {
 	private String name;
 	private char  gender;
 	private Date birthday;
 	private ArrayList<Gift> gifts;
-	
+	SimpleDateFormat dateFormat = new SimpleDateFormat("d/M/y H:m");
+
 
 	public Baby(){
 		gifts = new ArrayList<Gift>();
@@ -19,6 +23,18 @@ public class Baby {
 		this.birthday = birthday;
 		this.gender = gender;
 	}
+	
+	public Baby(String name, String birthday,char gender) {
+		this.name = name;
+		this.gender = gender;
+			try{
+				this.birthday = dateFormat.parse(birthday);
+			}catch(ParseException e){
+				System.out.println("Invalid date, type it again use this format (dd/MM/yyyy HH:mm)");
+			}
+		
+	}
+
 
   // Getters and Setters
 	public String getName() {
@@ -58,15 +74,26 @@ public class Baby {
 	public void printAll(ArrayList<Baby> babies){
 		for(Baby b: babies){
 			System.out.println(b);
+			if(b.gifts.size()>0){
+				System.out.println("-----Gifts---");
+				for(Gift g: b.gifts){
+				System.out.println(g);
+				}
+			}
+			System.out.println("---------------");
 		}
 	}
 	
 	public String toString(){
-		return name+"\n"+gender+"\n"+birthday.toString();
+		return "Name:"+name+"\n Gender:"+gender+"\n Birthday:"+dateFormat.format(birthday).toString();
 	}
 	
 	public boolean isOlder(Baby baby){
+		if(this.howOld() > baby.howOld()){
 		return true;
+		}else{
+		return false;
+		}
 		
 	}
 	
@@ -83,7 +110,7 @@ public class Baby {
 		return babies.size();
 	}
 	
-	public ArrayList sort(ArrayList<Baby> babies){	
+	public ArrayList<Baby> sort(ArrayList<Baby> babies){	
 		for(int i=0; i<babies.size()-1; i++){
 			for(int j=i+1; j<babies.size(); j++){
 				Baby s1 = babies.get(i);
@@ -99,12 +126,12 @@ public class Baby {
 		return babies;
 	}
 	
-	public ArrayList sortAge(ArrayList<Baby> babies){	
+	public ArrayList<Baby> sortAge(ArrayList<Baby> babies){	
 		for(int i=0; i<babies.size()-1; i++){
 			for(int j=i+1; j<babies.size(); j++){
 				Baby s1 = babies.get(i);
 				Baby s2 = babies.get(j);
-				if(s1.howOld() > s2.howOld()){
+				if(s1.isOlder(s2)){
 					Baby aux = s1;
 					babies.set(j,aux);
 					babies.set(i, s2);
